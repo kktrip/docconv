@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 import { resolve } from "path";
-const root = 'src'
+const root = resolve(__dirname, "src");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,8 +21,8 @@ export default defineConfig({
     outDir: "../dist",
     rollupOptions: {
       input: {
-        index: resolve(__dirname, root, "index.html"),
-        setting: resolve(__dirname, root, "setting.html"),
+        main: resolve(__dirname, root, "index.html"),
+        setting: resolve(__dirname, root, "setting/setting.html"),
       },
     },
     // Tauri supports es2021
@@ -31,5 +31,6 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
+    emptyOutDir: false,
   },
 });

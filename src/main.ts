@@ -85,7 +85,7 @@ if (ham != null && menu_wrapper != null) {
 const go_setting = document.querySelector("#go_setting");
 if (go_setting != null) {
   go_setting.addEventListener("click", () => {
-    window.location.href = "setting.html";
+    window.location.href = "setting/setting.html";
   });
 }
 

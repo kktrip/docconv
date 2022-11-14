@@ -3,8 +3,6 @@ const menu_wrapper = document.getElementById("menu_wrapper");
 
 if (ham != null && menu_wrapper != null) {
   ham.addEventListener("click", function () {
-    alert("ham click");
-
     ham.classList.toggle("clicked");
     menu_wrapper.classList.toggle("clicked");
   });
