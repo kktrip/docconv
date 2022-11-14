@@ -1,0 +1,292 @@
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color: #0f0f0f;
+  background-color: #f6f6f6;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.container {
+  margin: 0;
+  padding-top: 5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: 0.75s;
+}
+
+.logo.tauri:hover {
+  filter: drop-shadow(0 0 2em #24c8db);
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  text-align: center;
+}
+
+input,
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: #0f0f0f;
+  background-color: #ffffff;
+  transition: border-color 0.25s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: #396cd8;
+}
+
+input,
+button {
+  outline: none;
+}
+
+#greet-input {
+  margin-right: 5px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background: #fff;
+}
+
+.logo {
+  font-size: 24px;
+}
+
+.ham {
+	position: relative;
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+	background-color:#f6f6f6;
+  margin-right: 20px;
+  margin-left: auto;
+}
+.ham_line {
+  transition: all 0.3s;
+	position: absolute;
+	left: 10px;
+	width: 40px;
+	height: 3px;
+	background-color: #333333;
+}
+.ham_line1 {
+	top: 15px;
+}
+.ham_line2 {
+	top: 28px;
+}
+.ham_line3 {
+	top: 41px;
+}
+
+.clicked .ham_line1 {
+	transform: rotate(45deg);
+	top: 20px;
+}
+.clicked .ham_line2 {
+	width: 0px;
+}
+.clicked .ham_line3 {
+	transform: rotate(-45deg);
+	top: 20px;
+}
+
+.menu {
+	position: fixed;
+	width: 300px;
+	height: 300px;
+	right: -400px;
+	transition: all 0.3s;
+  background-color: #f6f6f6
+}
+.clicked .menu {
+	right: 8px;
+}
+
+.droparea{
+  background-color: #ffffff;
+  border: solid;
+  border-color:#1877F2;
+  border-radius:10px;
+  margin: 20px;
+  padding: 20px;
+  height: 350px;
+}
+
+.droptext {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #f4f4f4;
+  margin: 20% auto;
+  width: 50%;
+  box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
+  animation-name: modalopen;
+  animation-duration: 1s;
+  border-radius: 6px;
+}
+
+@keyframes modalopen {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+.modal-header h1 {
+  margin: 1rem 0;
+}
+
+.modal-header {
+  background: lightblue;
+  padding: 3px 15px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 8px 8px 0 0;
+}
+
+.modalClose {
+  font-size: 2rem;
+}
+
+.modalClose:hover {
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+  color: black;
+}
+
+.modal-button {
+  background-color: lightblue; 
+}
+
+.selectwrap {
+  position: relative;
+  width: 300px;
+  margin: 20px auto;
+}
+.selectwrap::after {
+  position: absolute;
+  top: 30%; /* 矢印の位置 */
+  right: 15px; /* 矢印の位置 */
+  width: 10px; /* 矢印の大きさ */
+  height: 10px; /* 矢印の大きさ */
+  border-top: 3px solid #58504A; /* 矢印の線 */
+  border-right: 3px solid #58504A; /* 矢印の線 */
+  -webkit-transform: rotate(135deg); /* 矢印の傾き */
+  transform: rotate(135deg); /* 矢印の傾き */
+  pointer-events: none; /* 矢印部分もクリック可能にする */
+  content: ""; 
+  }
+.select {
+  appearance: none; /* デフォルトの矢印を消す */
+  width: 100%; /* セレクトボックスの幅 */
+  height: 45px; /* セレクトボックスの高さ */
+  background-color: lightblue;  /* セレクトボックスの背景色 */
+  border: none; /* セレクトボックスのデフォルトの枠線を消す */
+  border-radius: 6px;  /* セレクトボックスの四隅の丸み */
+  font-size: 15px;
+  padding: 10px; /* セレクトボックスの内側の余白 */
+  cursor: pointer;
+}
+select:focus {
+  outline: none; /* focus 時のデフォルトの枠線を消す */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+
+  a:hover {
+    color: #24c8db;
+  }
+
+  input,
+  button {
+    color: #ffffff;
+    background-color: #0f0f0f98;
+  }
+
+}
+
+/********************** 設定画面用 **********************/
+.st_body {
+  margin: 0;
+}
+
+.st_container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 30%;
+}
+
+.st_submenu{
+  background-color: #eeeeee;
+  height: 500px;
+}

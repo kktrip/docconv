@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tauri App</title>
+    <script type="module" src="main.ts" defer></script>
+  </head>
+
+  <body>
+    <div class="ham" id="ham">
+      <span class="ham_line ham_line1"></span>
+      <span class="ham_line ham_line2"></span>
+      <span class="ham_line ham_line3"></span>
+    </div>
+
+    <div class="menu_wrapper" id="menu_wrapper">
+      <div class="menu">
+          <ul>
+              <li><a id="go_setting">設定</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="droparea"><p class="droptext">ファイルをドロップしてください。</p></div>
+      <div id="easyModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <p>シートを選択してください。</p>
+            <span class="modalClose">×</span>
+          </div>
+          <div class="modal-body">
+            <div class="js-selectbox"></div>
+          </div>
+          <div class="modal-body">
+            <button id="modal-desicion" class="modal-button">決定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
