@@ -12,7 +12,31 @@ async function commandGetSettings(): Promise<string[]> {
 
 function getSettings() {
   commandGetSettings().then((list) => {
-    list.forEach((s) => console.log(s));
+    const settingList = document.getElementById("setting_list");
+    if (settingList != null) {
+      const objList = Object.values(list);
+      console.log(objList);
+
+      objList.forEach((obj) => {
+        const tr = document.createElement("tr");
+        settingList.appendChild(tr);
+
+        const td_name = document.createElement("td");
+        const td_desc = document.createElement("td");
+        const td_param = document.createElement("td");
+        const input_param = document.createElement("input");
+        td_name.textContent = obj.name;
+        td_name.className = "st-td-name";
+        td_desc.textContent = obj.description;
+        td_desc.className = "st-td-desc";
+        input_param.value = obj.param;
+        tr.appendChild(td_name);
+        tr.appendChild(td_desc);
+        tr.appendChild(td_param);
+        td_param.appendChild(input_param);
+      });
+      // });
+    }
   });
 }
 

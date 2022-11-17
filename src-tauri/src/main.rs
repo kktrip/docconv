@@ -14,9 +14,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            command::main::read_sheets,
-            command::main::read_values,
-            command::setting::get_setting_list
+            command::read_sheets,
+            command::read_values,
+            command::get_setting_list
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
