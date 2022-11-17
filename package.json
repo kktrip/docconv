@@ -10,7 +10,11 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.1.0"
+    "@tauri-apps/api": "^1.1.0",
+    "directories": "^1.0.1",
+    "futures": "^2.3.3",
+    "sqlx": "^4.3.2",
+    "tokio": "^0.1.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.0",

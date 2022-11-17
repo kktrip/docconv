@@ -51,7 +51,7 @@ if (buttonClose != null) {
 
 // 決定ボタンがクリックされた時
 if (buttonDecision != null) {
-  buttonDecision?.addEventListener("click", modalFix);
+  buttonDecision.addEventListener("click", modalFix);
   // 決定ボタン押下時に選択していたセレクトボックスの値を返す
   function modalFix() {
     if (modal != null) modal.style.display = "none";
@@ -78,14 +78,6 @@ if (ham != null && menu_wrapper != null) {
   ham.addEventListener("click", function () {
     ham.classList.toggle("clicked");
     menu_wrapper.classList.toggle("clicked");
-  });
-}
-
-// 設定メニュー押下時
-const go_setting = document.querySelector("#go_setting");
-if (go_setting != null) {
-  go_setting.addEventListener("click", () => {
-    window.location.href = "setting/setting.html";
   });
 }
 
