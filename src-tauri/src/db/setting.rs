@@ -1,7 +1,8 @@
 use crate::db::sqlite::Db;
 use sqlx::query_as;
+use serde::{Deserialize};
 
-#[derive(Debug, sqlx::FromRow)]
+#[derive(Debug, sqlx::FromRow, Deserialize)]
 pub struct Setting {
     pub id: i64,
     pub name: String,
@@ -17,7 +18,7 @@ pub async fn find_by_name() -> anyhow::Result<Option<Vec<Setting>>> {
         .await
         .ok();
     match setting_table {
-        Some(st)) => Ok(Some(st.try_into()?)),
+        Some(st) => Ok(Some(st.try_into()?)),
         None => Ok(None),
     }
 }
