@@ -69,7 +69,7 @@ button {
 }
 
 button:hover {
-  border-color: #396cd8;
+  border-color: rgb(92, 233, 255);
 }
 
 input,
@@ -137,8 +137,8 @@ button {
   border-style: solid;
   text-align: center;
   text-decoration: none;
-  color: #ffffff;
-  background-color:darkgrey;
+  color: rgb(215, 250, 255);
+  background-color: rgb(215, 250, 255);
   height: 2.5rem;
   padding-top: 1rem;
 }
@@ -150,7 +150,7 @@ button {
 }
 
 .go-main-text {
-  color: #ffffff;
+  color: #58504A;
 }
 
 .menu {
@@ -168,7 +168,7 @@ button {
 .droparea{
   background-color: #ffffff;
   border: solid;
-  border-color:#1877F2;
+  border-color: lightblue;
   border-radius:10px;
   margin: 20px;
   padding: 20px;
@@ -180,6 +180,7 @@ button {
     justify-content: center;
     align-items: center;
     height: 90%;
+    color:#58504A;
 }
 
 .modal {
@@ -214,7 +215,7 @@ button {
 }
 
 .modal-header {
-  background: lightblue;
+  background: rgb(215, 250, 255);
   padding: 3px 15px;
   display: flex;
   justify-content: space-between;
@@ -232,11 +233,11 @@ button {
 
 .modal-body {
   padding: 20px;
-  color: black;
+  color: white;
 }
 
 .modal-button {
-  background-color: lightblue; 
+  background-color: rgb(215, 250, 255); 
 }
 
 .selectwrap {
@@ -261,7 +262,7 @@ button {
   appearance: none; /* デフォルトの矢印を消す */
   width: 100%; /* セレクトボックスの幅 */
   height: 45px; /* セレクトボックスの高さ */
-  background-color: lightblue;  /* セレクトボックスの背景色 */
+  background-color: rgb(168, 227, 236);  /* セレクトボックスの背景色 */
   border: none; /* セレクトボックスのデフォルトの枠線を消す */
   border-radius: 6px;  /* セレクトボックスの四隅の丸み */
   font-size: 15px;
@@ -300,6 +301,11 @@ select:focus {
   display: flex;
   justify-content: center;
   text-align: center;
+}
+
+.save-button-area {
+  margin: 0.8rem 1.6rem 1.0rem 0rem;
+  text-align: right;
 }
 
 .st-table {

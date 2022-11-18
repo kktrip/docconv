@@ -152,8 +152,13 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
 }
 
 #[tauri::command]
-pub fn get_setting_list() -> Result<Vec<Setting>, String> {
-    let res = block_on(setting::find_by_name());
-    // println!("Setting_res:{:?}", res);
+pub fn get_setting() -> Result<Vec<Setting>, String> {
+    let res = block_on(setting::get_setting());
+    res
+}
+
+#[tauri::command]
+pub fn update_setting(setting_list: Vec<Setting>) -> Result<bool, String> {
+    let res = block_on(setting::update_setting(setting_list));
     res
 }

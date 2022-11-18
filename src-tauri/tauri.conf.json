@@ -56,7 +56,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 670,
         "resizable": false,
         "title": "docconv",
         "width": 800
