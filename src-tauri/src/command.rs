@@ -162,3 +162,18 @@ pub fn update_setting(setting_list: Vec<Setting>) -> Result<bool, String> {
     let res = block_on(setting::update_setting(setting_list));
     res
 }
+
+#[tauri::command]
+pub fn comp_setting(
+    old_setting_list: Vec<Setting>,
+    new_setting_list: Vec<Setting>,
+) -> Result<bool, String> {
+    for old in old_setting_list {
+        let old_id = old.id;
+        let new_row = new_setting_list.iter().find(|e| e.id == old_id).unwrap();
+        if new_row.param != old.param {
+            return Ok(false);
+        }
+    }
+    Ok(true)
+}

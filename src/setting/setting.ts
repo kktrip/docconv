@@ -1,8 +1,11 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
+import { message, ask } from "@tauri-apps/api/dialog";
+
 const ham = document.getElementById("ham");
 const menu_wrapper = document.getElementById("menu_wrapper");
-const settingList = <HTMLTableElement>document.getElementById("setting_list");
+const settingTable = <HTMLTableElement>document.getElementById("setting_list");
+let settingList = new Array();
 
 // 画面読み込み時
 getSettings();
@@ -17,43 +20,83 @@ async function commandUpdateSetting(settingList: Object): Promise<string[]> {
   });
 }
 
+async function commandCompSetting(
+  oldSettingList: Object,
+  newSettingList: Object
+): Promise<boolean> {
+  return await invoke("comp_setting", {
+    oldSettingList: oldSettingList,
+    newSettingList: newSettingList,
+  });
+}
+
 function getSettings() {
   commandGetSetting().then((list) => {
-    if (settingList != null) {
+    settingList = list;
+    if (settingTable != null) {
       const objList = Object.values(list);
       console.log(objList);
 
-      objList.forEach((obj) => {
-        const tr = document.createElement("tr");
-        settingList.appendChild(tr);
-
-        const td_name = document.createElement("td");
-        const td_desc = document.createElement("td");
-        const td_param = document.createElement("td");
-        const input_param = document.createElement("input");
-        td_name.textContent = obj.name;
-        td_name.className = "st-td-name";
-        td_desc.textContent = obj.description;
-        td_desc.className = "st-td-desc";
-        input_param.value = obj.param;
-        tr.appendChild(td_name);
-        tr.appendChild(td_desc);
-        tr.appendChild(td_param);
-        td_param.appendChild(input_param);
+      objList.forEach((obj: any) => {
+        if (obj != null) {
+          const tr = document.createElement("tr");
+          settingTable.appendChild(tr);
+          const td_id = document.createElement("td");
+          const td_name = document.createElement("td");
+          const td_desc = document.createElement("td");
+          const td_param = document.createElement("td");
+          const input_param = document.createElement("input");
+          td_id.textContent = obj.id;
+          td_id.style.display = "none";
+          td_name.textContent = obj.name;
+          td_name.className = "st-td-name";
+          td_desc.textContent = obj.description;
+          td_desc.className = "st-td-desc";
+          input_param.value = obj.param;
+          tr.appendChild(td_id);
+          tr.appendChild(td_name);
+          tr.appendChild(td_desc);
+          tr.appendChild(td_param);
+          td_param.appendChild(input_param);
+        }
       });
       // });
     }
   });
 }
 
-function updateSetting(settingList: Object) {
-  commandUpdateSetting(settingList).then((res) => {
-    if (res) {
-      console.log("更新成功");
-    } else {
-      console.log("更新失敗");
+async function updateSetting(settingList: Object) {
+  let res = await commandUpdateSetting(settingList);
+  if (res) {
+    message("設定を保存しました", {
+      type: "info",
+      title: "設定保存",
+    });
+  } else {
+    message("設定の保存に失敗しました", {
+      type: "error",
+      title: "保存失敗",
+    });
+  }
+}
+
+// 値の変化をチェック
+async function compSetting(oldSettingList: Object, newSettingList: Object) {
+  let res = await commandCompSetting(oldSettingList, newSettingList);
+
+  if (!res) {
+    // 値に変更があった場合
+    let yn = await ask("設定を保存しますか？", {
+      title: "保存確認",
+      type: "warning",
+    });
+    if (yn) {
+      updateSetting(newSettingList);
     }
-  });
+  } else {
+    // 設定に変更がなかった場合
+    updateSetting(newSettingList);
+  }
 }
 
 if (ham != null && menu_wrapper != null) {
@@ -68,25 +111,26 @@ if (buttonSave != null) {
   buttonSave.addEventListener("click", saveSetting);
   function saveSetting() {
     let newSettingList = [];
-    for (let row of Array.from(settingList.rows)) {
+    for (let row of Array.from(settingTable.rows)) {
       let stRow;
-      let nm = "";
+      let id = 0;
       let prm = "";
       let i = 0;
       for (let cell of Array.from(row.cells)) {
-        if (i == 2) {
-          let input = cell.firstElementChild;
-          prm = input.value;
-        } else {
-          if (i == 0) {
-            nm = cell.textContent;
+        if (i == 0) {
+          if (cell.textContent != null) id = parseInt(cell.textContent);
+        } else if (i == 3) {
+          let input = <HTMLInputElement>cell.firstElementChild;
+          if (input != null) {
+            prm = input.value;
           }
         }
         i += 1;
       }
-      stRow = { id: 0, name: nm, description: "", param: prm };
+      // name, descriptionの値はダミー
+      stRow = { id: id, name: "", description: "", param: prm };
       newSettingList.push(stRow);
     }
-    updateSetting(newSettingList);
+    compSetting(settingList, newSettingList);
   }
 }

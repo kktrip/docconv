@@ -17,7 +17,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             command::read_sheets,
             command::read_values,
             command::get_setting,
-            command::update_setting
+            command::update_setting,
+            command::comp_setting
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

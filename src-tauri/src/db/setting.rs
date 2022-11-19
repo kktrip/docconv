@@ -25,12 +25,11 @@ pub async fn update_setting(setting_list: Vec<Setting>) -> Result<bool, String> 
     let db = Db::new().await;
     let pool = db.0.clone();
     for st in setting_list {
-        sqlx::query("UPDATE setting SET param = ? WHERE name = ?")
+        let _upd = sqlx::query("UPDATE setting SET param = ? WHERE id = ?")
             .bind(st.param)
-            .bind(st.name)
+            .bind(st.id.to_string())
             .execute(&*pool)
             .await;
     }
     Ok(true)
 }
-
