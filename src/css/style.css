@@ -337,3 +337,13 @@ select:focus {
 .wrapper {
   display: flex;
 }
+
+.input-error {
+  border-color: red;
+  background: RGB(255, 0, 0, 0.2);
+}
+
+.input-error-text {
+  font-size: 0.3rem;
+  color: red;
+}
