@@ -10,6 +10,9 @@ const buttonClose = document.getElementsByClassName("modalClose")[0];
 const buttonDecision = document.getElementById("modal-desicion");
 let gfilePath: string = ""; //処理中のファイルのフルパス
 
+const settingList: any = await commandGetSetting();
+const stCsvPrefix = settingList[12].param; // CSVファイル名のプレフィックス
+
 function modalOpen(ary: string[]) {
   if (modal != null) {
     modal.style.display = "block";
@@ -98,6 +101,18 @@ async function commandGetValues(path: string, shNm: string): Promise<string[]> {
   });
 }
 
+// メインプロセス::特定のIDの設定内容を取得する
+// async function commandGetSettingById(id: Number): Promise<string[]> {
+//   return await invoke("get_setting_by_id", {
+//     id: id,
+//   });
+// }
+
+// 設定一覧を取得
+async function commandGetSetting(): Promise<string[]> {
+  return await invoke("get_setting");
+}
+
 // シートを取得する
 function getSheets(path: string) {
   commandGetSheets(path).then((sheets) => {
@@ -115,7 +130,7 @@ function getFileName(filepath: string) {
 }
 
 // シート内の各値を取得する
-function getValues(sheetName: string) {
+async function getValues(sheetName: string) {
   commandGetValues(gfilePath, sheetName).then((res) => {
     // 値を使ってCSVファイルを作る
     let csvData = "";
@@ -124,10 +139,9 @@ function getValues(sheetName: string) {
     });
     // Windows前提の実装
     const fileinfo = getFileName(gfilePath);
-    const filename = "convert_" + fileinfo[0] + ".csv";
+    const filename = stCsvPrefix + fileinfo[0] + ".csv";
     save({ defaultPath: filename }).then((path) => {
       if (path) {
-        // sleepFunc(10000).then(() => {
         writeTextFile(path, csvData)
           .then(() => {
             message("CSVファイルが出力されました。", {
@@ -145,7 +159,6 @@ function getValues(sheetName: string) {
               }
             );
           });
-        // });
       }
     });
   });

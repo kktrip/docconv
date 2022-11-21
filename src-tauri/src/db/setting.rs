@@ -1,5 +1,5 @@
 use crate::db::sqlite::Db;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use sqlx::query_as;
 
 #[derive(Debug, sqlx::FromRow, Serialize, Deserialize)]
@@ -13,13 +13,25 @@ pub struct Setting {
 pub async fn get_setting() -> Result<Vec<Setting>, String> {
     let db = Db::new().await;
     let pool = db.0.clone();
-    let setting_table = query_as::<_, Setting>("select * from setting")
+    let setting_table = query_as::<_, Setting>("SELECT * FROM setting")
         .fetch_all(&*pool)
         .await
         .ok();
 
     Ok(setting_table.unwrap())
 }
+
+// pub async fn get_setting_by_id(id: i64) -> Result<Setting, String> {
+//     let db = Db::new().await;
+//     let pool = db.0.clone();
+//     let st = sqlx::query_as::<_, Setting>("SELECT * FROM setting WHERE id = ?")
+//         .bind(id)
+//         .fetch_one(&*pool)
+//         .await
+//         .ok();
+
+//     Ok(st.unwrap())
+// }
 
 pub async fn update_setting(setting_list: Vec<Setting>) -> Result<bool, String> {
     let db = Db::new().await;

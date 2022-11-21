@@ -26,7 +26,21 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
     let mut exp_list = Vec::new();
     // シート内の値を取得していく
     let range = wb.worksheet_range(&sheetname).unwrap().unwrap();
-    // フォーマットチェック
+
+    // 設定読み取り
+    let setting = get_setting().unwrap();
+    let st_file_exist_cell_range_1 = &setting[0].param;
+    let st_file_exist_str_1 = &setting[1].param;
+    let st_file_exist_cell_range_2 = &setting[2].param;
+    let st_file_exist_str_2 = &setting[3].param;
+    let st_file_exist_cell_range_3 = &setting[4].param;
+    let st_file_exist_str_3 = &setting[5].param;
+    let st_read_start_row = &setting[6].param;
+    let st_read_max_row = &setting[7].param;
+    let st_read_end_col = &setting[8].param;
+    let st_read_end_str = &setting[9].param;
+    let st_account_cnt = &setting[10].param;
+    let st_tax_rate = &setting[11].param;
 
     // 各行の値読み込み
     let start_row: u32 = 5;
@@ -34,7 +48,7 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
     let empty = &DataType::Empty;
     for row in start_row..max_row {
         let cell_val = range.get_value((row, 0)).unwrap_or(empty).to_string();
-        if cell_val.is_empty() || cell_val.contains("合計") {
+        if cell_val.is_empty() || cell_val.contains(st_read_end_str) {
             break;
         }
 
@@ -156,6 +170,12 @@ pub fn get_setting() -> Result<Vec<Setting>, String> {
     let res = block_on(setting::get_setting());
     res
 }
+
+// #[tauri::command]
+// pub fn get_setting_by_id(id: i64) -> Result<Setting, String> {
+//     let res = block_on(setting::get_setting_by_id(id));
+//     res
+// }
 
 #[tauri::command]
 pub fn update_setting(setting_list: Vec<Setting>) -> Result<bool, String> {

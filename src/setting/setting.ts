@@ -1,11 +1,10 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-import { message, ask } from "@tauri-apps/api/dialog";
+import { message } from "@tauri-apps/api/dialog";
 
 const ham = document.getElementById("ham");
 const menu_wrapper = document.getElementById("menu_wrapper");
 const settingTable = <HTMLTableElement>document.getElementById("setting_list");
-// let settingList = new Array();
 
 // 画面読み込み時
 getSettings();
@@ -32,7 +31,6 @@ async function commandUpdateSetting(settingList: Object): Promise<string[]> {
 
 function getSettings() {
   commandGetSetting().then((list) => {
-    // settingList = list;
     if (settingTable != null) {
       const objList = Object.values(list);
 
