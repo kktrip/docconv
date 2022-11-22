@@ -10,8 +10,12 @@ const buttonClose = document.getElementsByClassName("modalClose")[0];
 const buttonDecision = document.getElementById("modal-desicion");
 let gfilePath: string = ""; //処理中のファイルのフルパス
 
-const settingList: any = await commandGetSetting();
-const stCsvPrefix = settingList[12].param; // CSVファイル名のプレフィックス
+let settingList: any;
+let stCsvPrefix: any;
+commandGetSetting().then((st) => {
+  settingList = st;
+  stCsvPrefix = settingList[12].param; // CSVファイル名のプレフィックス
+});
 
 function modalOpen(ary: string[]) {
   if (modal != null) {
