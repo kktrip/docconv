@@ -134,33 +134,43 @@ function resetSetting() {
           let input = <HTMLInputElement>cell.firstElementChild;
           switch (rowindex + 1) {
             case 1:
+              // ファイル判定条件1 セル行番号
               input.value = "1";
               break;
             case 2:
+              // ファイル判定条件1 セル列番号
               input.value = "1";
               break;
             case 3:
+              // ファイル判定条件1 文字
               input.value = "経費精算表";
               break;
             case 7:
+              // 読み取り開始行
               input.value = "6";
               break;
             case 8:
+              // 読み取り開始列
               input.value = "1";
               break;
             case 9:
+              // 	読み取り最大行数
               input.value = "100";
               break;
             case 10:
-              input.value = "1";
+              // 読み取り最大列数
+              input.value = "10";
               break;
             case 11:
+              // 読み取り終了条件 文字
               input.value = "合計";
               break;
             case 12:
+              // 消費税率
               input.value = "0.1";
               break;
             case 13:
+              // 	CSVファイル名のプレフィックス
               input.value = "convert_";
               break;
             default:

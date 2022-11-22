@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 700,
         "resizable": false,
-        "title": "docconv",
+        "title": "経費精算表CSV変換ツール",
         "width": 800
       }
     ]

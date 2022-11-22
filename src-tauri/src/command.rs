@@ -37,8 +37,8 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Result<Vec<Vec<String>>, 
     let st_file_exist_str_2 = &setting[5].param;
     let st_read_start_row = &setting[6].param;
     let st_read_start_col = &setting[7].param;
-    let st_read_end_row = &setting[8].param;
-    let st_read_end_col = &setting[9].param;
+    let st_read_max_row = &setting[8].param;
+    let st_read_max_col = &setting[9].param;
     let st_read_end_str = &setting[10].param;
     let st_tax_rate = &setting[11].param;
 
@@ -73,7 +73,7 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Result<Vec<Vec<String>>, 
 
     // 各行の値読み込み
     let start_row: u32 = st_read_start_row.parse().unwrap_or(1) - 1;
-    let max_row = st_read_end_row.parse().unwrap_or(1);
+    let max_row = st_read_max_row.parse().unwrap_or(1);
 
     for row in start_row..max_row {
         let cell_val = range.get_value((row, 0)).unwrap_or(empty).to_string();
@@ -104,8 +104,10 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Result<Vec<Vec<String>>, 
         // 借方金額記入位置の取得
         let mut dev_cost_col = 0;
         let start_col: u32 = st_read_start_col.parse().unwrap();
-        let max_col: u32 = st_read_end_col.parse().unwrap();
-        for col in start_col..max_col {
+        let end_col: u32 = st_read_max_col.parse().unwrap();
+        println!("start_col:{:?}", start_col);
+        println!("end_col:{:?}", end_col);
+        for col in start_col..end_col {
             let tmp_dev_cost = range.get_value((row, col)).unwrap_or(empty);
             // 経費がいずれかの勘定項目列に記入されているか？
             if !tmp_dev_cost.is_empty() {
@@ -116,6 +118,7 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Result<Vec<Vec<String>>, 
 
         // 借方勘定科目(E)
         let deb_acc_val = range.get_value((4, dev_cost_col)).unwrap_or(empty);
+        println!("deb_acc_val:{:?}", deb_acc_val);
         row_list.push(deb_acc_val.to_string());
 
         // 借方補助科目(F)

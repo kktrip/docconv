@@ -32,7 +32,7 @@ fn get_migration_sqls() -> Vec<String> {
         INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(7, \"読み取り開始行\", \"経費精算表シートの読み取り開始行\", \"6\");
         INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(8, \"読み取り開始列\", \"経費精算表シートの読み取り開始行\", \"1\");
         INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(9, \"読み取り最大行数\", \"経費精算表シートの読み取り対象行の最大値\", \"100\");
-        INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(10, \"読み取り最大列数\", \"経費精算表シートの読み取り終了を判定するセルの列番号\", \"1\");
+        INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(10, \"読み取り最大列数\", \"経費精算表シートの読み取り終了を判定するセルの列番号\", \"10\");
         INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(11, \"読み取り終了条件 文字\", \"経費精算表シートの読み取り終了を判定する文字列\", \"合計\");
         INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(12, \"消費税率\", \"適用する消費税率\", \"0.1\");
         INSERT OR IGNORE INTO setting(id, name, description, param) VALUES(13, \"CSVファイル名のプレフィックス\", \"出力されたCSVファイルの頭に付与する文字列\", \"convert_\");

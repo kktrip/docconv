@@ -22,6 +22,7 @@
   justify-content: center;
   text-align: center;
   width: 100%;
+  margin-bottom: 7.5rem;
 }
 
 .logo {
@@ -290,6 +291,14 @@ select:focus {
     background-color: #0f0f0f98;
   }
 
+}
+
+.copyright{
+  text-align: center;
+}
+
+.copyright-text{
+  font-size: 0.8rem;
 }
 
 /********************** 設定画面用 **********************/
