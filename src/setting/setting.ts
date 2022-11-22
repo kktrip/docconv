@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-import { message } from "@tauri-apps/api/dialog";
+import { message, ask } from "@tauri-apps/api/dialog";
 
 const ham = document.getElementById("ham");
 const menu_wrapper = document.getElementById("menu_wrapper");
@@ -105,9 +105,74 @@ if (ham != null && menu_wrapper != null) {
   });
 }
 
-const buttonSave = document.getElementById("save-button");
+const go_main = document.getElementById("go_main");
+if (go_main != null) {
+  go_main.addEventListener("click", function () {
+    window.location.href = "../index.html";
+  });
+}
+
+const buttonReset = document.getElementById("reset_button");
+if (buttonReset != null) {
+  buttonReset.addEventListener("click", resetSetting);
+}
+
+const buttonSave = document.getElementById("save_button");
 if (buttonSave != null) {
   buttonSave.addEventListener("click", saveSetting);
+}
+
+function resetSetting() {
+  ask("設定が初期化されます。よろしいですか？\n（保存はされません）", {
+    title: "確認",
+  }).then(() => {
+    let rowindex = 0;
+    for (let row of Array.from(settingTable.rows)) {
+      let colindex = 0;
+      for (let cell of Array.from(row.cells)) {
+        if (colindex == 3) {
+          let input = <HTMLInputElement>cell.firstElementChild;
+          switch (rowindex + 1) {
+            case 1:
+              input.value = "1";
+              break;
+            case 2:
+              input.value = "1";
+              break;
+            case 3:
+              input.value = "経費精算表";
+              break;
+            case 7:
+              input.value = "6";
+              break;
+            case 8:
+              input.value = "1";
+              break;
+            case 9:
+              input.value = "100";
+              break;
+            case 10:
+              input.value = "1";
+              break;
+            case 11:
+              input.value = "合計";
+              break;
+            case 12:
+              input.value = "0.1";
+              break;
+            case 13:
+              input.value = "convert_";
+              break;
+            default:
+              input.value = "";
+              break;
+          }
+        }
+        colindex += 1;
+      }
+      rowindex += 1;
+    }
+  });
 }
 
 function saveSetting() {
@@ -145,6 +210,9 @@ function paramCheck() {
   const input_settings = Array.from(
     document.getElementsByClassName("input-setting")
   );
+  const is4 = <HTMLInputElement>input_settings[3];
+  const is5 = <HTMLInputElement>input_settings[4];
+  const is6 = <HTMLInputElement>input_settings[5];
 
   for (let i = 0; i < input_settings.length; i++) {
     const input_setting = <HTMLInputElement>input_settings[i];
@@ -166,88 +234,90 @@ function paramCheck() {
 
     switch (id) {
       case 1:
-        // ファイル判定条件1 セル位置
-        // （必須入力）英字3文字以下 + 数字1～1048576
-        p_param.textContent = "セル位置として正しい形式ではありません。";
-        regex = /^[A-Z]{1,3}[0-9]{1,7}$/;
+        // ファイル判定条件1 セルの行番号
+        // （必須入力）数字1～1000
+        p_param.textContent = "1～1000の数値を入力してください。";
+        regex = /^([1-9][0-9]?[0-9]?|0|1000)$/;
         break;
       case 2:
+        // ファイル判定条件1 セルの列番号
+        // （必須入力）数字1～1000
+        p_param.textContent = "1～1000の数値を入力してください。";
+        regex = /^([1-9][0-9]?[0-9]?|0|1000)$/;
+        break;
+      case 3:
         // ファイル判定条件1 文字
         // （必須入力）任意の文字列1～100文字以下
         p_param.textContent = "1～100文字以内で入力してください。";
         regex = /^.{1,100}$/;
         break;
-      case 3:
-        // ファイル判定条件2 セル位置
-        // （任意入力）英字3文字以下 + 数字1～1048576
-        if (val != "") {
-          p_param.textContent = "セル位置として正しい形式ではありません。";
-          regex = /^[A-Z]{1,3}[0-9]{1,7}$/;
-        } else {
-          noCheckFlg = true;
-        }
-        break;
       case 4:
-        // ファイル判定条件2 文字
-        // （任意入力）任意の文字列1～100文字以下
-        if (val != "") {
-          p_param.textContent = "100文字以内で入力してください。";
-          regex = /^.{1,100}$/;
-        } else {
+        // ファイル判定条件2 セルの行番号
+        // （任意入力）数字1～1000
+        if (val == "" && is5.value == "" && is6.value == "") {
           noCheckFlg = true;
+        } else {
+          p_param.textContent = "1～1000の数値を入力してください。";
+          regex = /^([1-9][0-9]?[0-9]?|0|1000)$/;
         }
         break;
       case 5:
-        // ファイル判定条件3 セル位置
-        // （任意入力）英字3文字以下 + 数字1～1048576
-        if (val != "") {
-          p_param.textContent = "セル位置として正しい形式ではありません。";
-          regex = /^[A-Z]{1,3}[0-9]{1,7}$/;
-        } else {
+        // ファイル判定条件2 セルの列番号
+        // （任意入力）数字1～1000
+        if (val == "" && is4.value == "" && is6.value == "") {
           noCheckFlg = true;
+        } else {
+          p_param.textContent = "1～1000の数値を入力してください。";
+          regex = /^([1-9][0-9]?[0-9]?|0|1000)$/;
         }
         break;
       case 6:
-        // ファイル判定条件3 文字
+        // ファイル判定条件2 文字
         // （任意入力）任意の文字列1～100文字以下
-        if (val != "") {
-          p_param.textContent = "100文字以内で入力してください。";
-          regex = /^.{1,100}$/;
-        } else {
+        if (val == "" && is4.value == "" && is5.value == "") {
           noCheckFlg = true;
+        } else {
+          p_param.textContent = "1～100文字以内で入力してください。";
+          regex = /^.{1,100}$/;
         }
         break;
       case 7:
-        // 読み取り最大行数
+        // 読み取り開始行
         //（必須入力）100以下の数値
         p_param.textContent = "1～100の数値を入力してください。";
         regex = /^([1-9][0-9]?|0|100)$/;
         break;
       case 8:
-        // 読み取り終了条件 列番号
+        // 読み取り開始列
         //（必須入力）100以下の数値
         p_param.textContent = "1～100の数値を入力してください。";
         regex = /^([1-9][0-9]?|0|100)$/;
         break;
       case 9:
+        // 読み取り最大行数
+        //（必須入力）100以下の数値
+        p_param.textContent = "1～100の数値を入力してください。";
+        regex = /^([1-9][0-9]?|0|100)$/;
+        break;
+      case 10:
+        // 読み取り最大列数
+        //（必須入力）100以下の数値
+        p_param.textContent = "1～100の数値を入力してください。";
+        regex = /^([1-9][0-9]?|0|100)$/;
+        break;
+      case 11:
         // 読み取り終了条件 文字
         //（必須入力）任意の文字列1～100文字以下
         p_param.textContent = "100文字以内で入力してください。";
         regex = /^.{1,100}$/;
         break;
-      case 10:
-        // 勘定科目数
-        //（必須入力）100以下の数値
-        p_param.textContent = "1～100の数値を入力してください。";
-        regex = /^.{1,100}$/;
-        break;
-      case 11:
+      case 12:
         // 消費税率
         //（必須入力）0.1～1以下の小数
         p_param.textContent = "0.01から0.99の数値を入力してください。";
         regex = /^0\.[0-9][1-9]?$/;
         break;
-      case 12:
+      case 13:
         // CSVファイル名のプレフィックス
         //（必須入力）任意の文字列1～100文字以下
         p_param.textContent = "100文字以内で入力してください。";

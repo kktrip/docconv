@@ -84,6 +84,13 @@ if (ham != null && menu_wrapper != null) {
   });
 }
 
+const go_setting = document.getElementById("go_setting");
+if (go_setting != null) {
+  go_setting.addEventListener("click", function () {
+    window.location.href = "setting/setting.html";
+  });
+}
+
 // =================================================================
 
 // メインプロセス::シート名リストを取得する
@@ -131,44 +138,51 @@ function getFileName(filepath: string) {
 
 // シート内の各値を取得する
 async function getValues(sheetName: string) {
-  commandGetValues(gfilePath, sheetName).then((res) => {
-    // 値を使ってCSVファイルを作る
-    let csvData = "";
-    res.forEach((item) => {
-      csvData = csvData + Object.values(item).join(",") + "\r\n";
-    });
-    // Windows前提の実装
-    const fileinfo = getFileName(gfilePath);
-    const filename = stCsvPrefix + fileinfo[0] + ".csv";
-    save({ defaultPath: filename }).then((path) => {
-      if (path) {
-        writeTextFile(path, csvData)
-          .then(() => {
-            message("CSVファイルが出力されました。", {
-              type: "info",
-              title: "CSV出力完了",
+  commandGetValues(gfilePath, sheetName)
+    .then((res) => {
+      // 値を使ってCSVファイルを作る
+      let csvData = "";
+      res.forEach((item) => {
+        csvData = csvData + Object.values(item).join(",") + "\r\n";
+      });
+      // Windows前提の実装
+      const fileinfo = getFileName(gfilePath);
+      const filename = stCsvPrefix + fileinfo[0] + ".csv";
+      save({ defaultPath: filename }).then((path) => {
+        if (path) {
+          writeTextFile(path, csvData)
+            .then(() => {
+              message("CSVファイルが出力されました。", {
+                type: "info",
+                title: "CSV出力完了",
+              });
+            })
+            .catch((error) => {
+              message(
+                "以下のエラーが発生したため、ファイルが保存できませんでした。\r\n\r\n" +
+                  error,
+                {
+                  type: "error",
+                  title: "CSV出力エラー",
+                }
+              );
             });
-          })
-          .catch((error) => {
-            message(
-              "以下のエラーが発生したため、ファイルが保存できませんでした。\r\n\r\n" +
-                error,
-              {
-                type: "error",
-                title: "CSV出力エラー",
-              }
-            );
-          });
-      }
+        }
+      });
+    })
+    .catch(() => {
+      message("経費精算表のフォーマットではありません", {
+        type: "error",
+        title: "フォーマットエラー",
+      });
     });
-  });
 }
 
 appWindow.onFileDropEvent((e) => {
   if (e.payload.type === "hover") {
     // hover
   } else if (e.payload.type === "drop") {
-    let path: string[] = e.payload.paths;
+    const path: string[] = e.payload.paths;
     for (let i = 0; i < path.length; i++) {
       // グローバル変数にセット
       gfilePath = path[i];

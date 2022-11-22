@@ -132,24 +132,24 @@ button {
 	top: 1.5rem;
 }
 
-.go-main-menu {
+.sub-menu {
   border-width: thin;
   border-style: solid;
   text-align: center;
   text-decoration: none;
   color: rgb(215, 250, 255);
   background-color: rgb(215, 250, 255);
-  height: 2.5rem;
-  padding-top: 1rem;
+  cursor: pointer;
+  cursor: hand;
 }
 
-.go-main-menu-blank {
+.go-menu-blank {
   background-color: #f6f6f6;
   height: 2.5rem;
   padding-top: 1rem;
 }
 
-.go-main-text {
+.sub-menu-text {
   color: #58504A;
 }
 
@@ -238,6 +238,7 @@ button {
 
 .modal-button {
   background-color: rgb(215, 250, 255); 
+  margin-right: 1rem;
 }
 
 .selectwrap {
@@ -303,7 +304,7 @@ select:focus {
   text-align: center;
 }
 
-.save-button-area {
+.button-area {
   margin: 0.8rem 1.6rem 1.0rem 0rem;
   text-align: right;
 }

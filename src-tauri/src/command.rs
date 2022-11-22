@@ -19,7 +19,7 @@ pub fn read_sheets(filepath: &str) -> Vec<String> {
 }
 
 #[tauri::command]
-pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
+pub fn read_values(filepath: &str, sheetname: &str) -> Result<Vec<Vec<String>>, String> {
     let mut wb: Xlsx<_> = open_workbook(filepath).expect("Cannot Open Excel Book");
 
     // 経費一覧
@@ -29,23 +29,52 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
 
     // 設定読み取り
     let setting = get_setting().unwrap();
-    let st_file_exist_cell_range_1 = &setting[0].param;
-    let st_file_exist_str_1 = &setting[1].param;
-    let st_file_exist_cell_range_2 = &setting[2].param;
-    let st_file_exist_str_2 = &setting[3].param;
-    let st_file_exist_cell_range_3 = &setting[4].param;
-    let st_file_exist_str_3 = &setting[5].param;
+    let st_file_exist_row_1 = &setting[0].param;
+    let st_file_exist_col_1 = &setting[1].param;
+    let st_file_exist_str_1 = &setting[2].param;
+    let st_file_exist_row_2 = &setting[3].param;
+    let st_file_exist_col_2 = &setting[4].param;
+    let st_file_exist_str_2 = &setting[5].param;
     let st_read_start_row = &setting[6].param;
-    let st_read_max_row = &setting[7].param;
-    let st_read_end_col = &setting[8].param;
-    let st_read_end_str = &setting[9].param;
-    let st_account_cnt = &setting[10].param;
+    let st_read_start_col = &setting[7].param;
+    let st_read_end_row = &setting[8].param;
+    let st_read_end_col = &setting[9].param;
+    let st_read_end_str = &setting[10].param;
     let st_tax_rate = &setting[11].param;
 
-    // 各行の値読み込み
-    let start_row: u32 = 5;
-    let max_row = range.get_size().0 as u32;
+    // 経費精算表フォーマットチェック
     let empty = &DataType::Empty;
+    let header_val1;
+    let header_val2;
+
+    header_val1 = range
+        .get_value((
+            st_file_exist_row_1.parse().unwrap_or(1) - 1,
+            st_file_exist_col_1.parse().unwrap_or(1) - 1,
+        ))
+        .unwrap_or(empty)
+        .to_string();
+    if header_val1 != st_file_exist_str_1.to_string() {
+        return Err("経費精算表のフォーマットではありません".to_string());
+    }
+
+    if st_file_exist_row_2 != "" && st_file_exist_col_2 != "" {
+        header_val2 = range
+            .get_value((
+                st_file_exist_row_2.parse().unwrap_or(1) - 1,
+                st_file_exist_col_2.parse().unwrap_or(1) - 1,
+            ))
+            .unwrap_or(empty)
+            .to_string();
+        if header_val2 != st_file_exist_str_2.to_string() {
+            return Err("経費精算表のフォーマットではありません".to_string());
+        }
+    }
+
+    // 各行の値読み込み
+    let start_row: u32 = st_read_start_row.parse().unwrap_or(1) - 1;
+    let max_row = st_read_end_row.parse().unwrap_or(1);
+
     for row in start_row..max_row {
         let cell_val = range.get_value((row, 0)).unwrap_or(empty).to_string();
         if cell_val.is_empty() || cell_val.contains(st_read_end_str) {
@@ -64,17 +93,19 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
         // 決算(C)
         row_list.push("".to_string());
 
+        println!("{:?}", row);
         // 取引日付(D)
         let tmp_date_val = range.get_value((row, 0)).unwrap_or(empty);
         let local = Local.with_ymd_and_hms(1900, 1, 1, 0, 0, 0).unwrap();
-        let offset = Duration::days(tmp_date_val.to_string().parse().unwrap_or(0) - 2);
+        let offset = Duration::days(tmp_date_val.to_string().parse().unwrap_or(2) - 2);
         let date_val = local + offset;
-        // yyyyMMdd形式に変換したい。。。
         row_list.push(date_val.to_string()[0..10].replace("-", "/").to_string());
 
         // 借方金額記入位置の取得
         let mut dev_cost_col = 0;
-        for col in 1..9 {
+        let start_col: u32 = st_read_start_col.parse().unwrap();
+        let max_col: u32 = st_read_end_col.parse().unwrap();
+        for col in start_col..max_col {
             let tmp_dev_cost = range.get_value((row, col)).unwrap_or(empty);
             // 経費がいずれかの勘定項目列に記入されているか？
             if !tmp_dev_cost.is_empty() {
@@ -101,9 +132,9 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
         row_list.push(deb_cost_val.to_string());
 
         // 借方税金額(J)
-        let tax_rate = 0.1;
-        let deb_cost_num = deb_cost_val.to_string().parse().unwrap_or(0.0);
-        let deb_tax_num = deb_cost_num / 1.0 + tax_rate;
+        let tax_rate: f64 = st_tax_rate.parse().unwrap();
+        let deb_cost_num: f64 = deb_cost_val.to_string().parse().unwrap_or(0.0);
+        let deb_tax_num: f64 = deb_cost_num + tax_rate;
         let deb_tax_val = deb_tax_num.to_string();
         row_list.push(deb_tax_val.to_string());
 
@@ -162,7 +193,7 @@ pub fn read_values(filepath: &str, sheetname: &str) -> Vec<Vec<String>> {
 
         exp_list.push(row_list);
     }
-    return exp_list;
+    return Ok(exp_list);
 }
 
 #[tauri::command]
